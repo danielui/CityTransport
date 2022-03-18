@@ -115,5 +115,8 @@ carParams = {'transportMode': 'car'}
 carParams.update(commonParams)
 
 
-print(calculate_cost_of_travel(get_car_route_length, carParams,
-                               get_public_transit_time, commonParams, ticketAndFuelPrices))
+travelCost = calculate_cost_of_travel(get_car_route_length, carParams,
+                                      get_public_transit_time, commonParams, ticketAndFuelPrices)
+
+print("Fuel price for trip is: " +
+      str(travelCost[0]) + "zl" + "\n" "Ticket price for trip is: " + str(travelCost[1]) + "zl")
