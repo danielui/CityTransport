@@ -88,35 +88,39 @@ def calculate_cost_of_travel(get_car_route_length, carParams, get_public_transit
     return travelList
 
 
-# reapeat asking for data, until it's correct
-geoCoordinatesFromOriginPoint = None
-geoCoordinatesFromDestinationPoint = None
-while (geoCoordinatesFromOriginPoint or geoCoordinatesFromDestinationPoint) == None:
-    try:
-        originPoint = input("Start point: ")
-        destinationPoint = input("End point: ")
-        ticketAndFuelPrices = {'1LiterPrice': float(input("Fuel price [zl/L]: ")),
-                               'litersPer100Kilometers': float(input("Fuel consuption [L/100km]: ")),
-                               '75min': 4.40, '20min': 3.40}
+def main():
 
-        geoCoordinatesFromOriginPoint = get_geocoordinates_from_location(
-            originPoint)
-        geoCoordinatesFromDestinationPoint = get_geocoordinates_from_location(
-            destinationPoint)
-    except (KeyError, IndexError):
-        print("Place doesn't exist")
-    except (ValueError):
-        print("This value is not the number")
+    # reapeat asking for data, until it's correct
+    geoCoordinatesFromOriginPoint = None
+    geoCoordinatesFromDestinationPoint = None
+    while (geoCoordinatesFromOriginPoint or geoCoordinatesFromDestinationPoint) == None:
+        try:
+            originPoint = input("Start point: ")
+            destinationPoint = input("End point: ")
+            ticketAndFuelPrices = {'1LiterPrice': float(input("Fuel price [zl/L]: ")),
+                                   'litersPer100Kilometers': float(input("Fuel consuption [L/100km]: ")),
+                                   '75min': 4.40, '20min': 3.40}
 
-commonParams = {'apiKey': 'hKtKIZVYfsLbNqwCdOplJNC5sP94aGg4fhC746yGadw',
-                'origin': geoCoordinatesFromOriginPoint,
-                'destination': geoCoordinatesFromDestinationPoint}
-carParams = {'transportMode': 'car'}
-carParams.update(commonParams)
+            geoCoordinatesFromOriginPoint = get_geocoordinates_from_location(
+                originPoint)
+            geoCoordinatesFromDestinationPoint = get_geocoordinates_from_location(
+                destinationPoint)
+        except (KeyError, IndexError):
+            print("Place doesn't exist")
+        except (ValueError):
+            print("This value is not the number")
+
+    commonParams = {'apiKey': 'hKtKIZVYfsLbNqwCdOplJNC5sP94aGg4fhC746yGadw',
+                    'origin': geoCoordinatesFromOriginPoint,
+                    'destination': geoCoordinatesFromDestinationPoint}
+    carParams = {'transportMode': 'car'}
+    carParams.update(commonParams)
+
+    travelCost = calculate_cost_of_travel(get_car_route_length, carParams,
+                                          get_public_transit_time, commonParams, ticketAndFuelPrices)
+
+    print("Fuel price for trip is: " +
+          str(travelCost[0]) + "zl" + "\n" "Ticket price for trip is: " + str(travelCost[1]) + "zl")
 
 
-travelCost = calculate_cost_of_travel(get_car_route_length, carParams,
-                                      get_public_transit_time, commonParams, ticketAndFuelPrices)
-
-print("Fuel price for trip is: " +
-      str(travelCost[0]) + "zl" + "\n" "Ticket price for trip is: " + str(travelCost[1]) + "zl")
+main()
